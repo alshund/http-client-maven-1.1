@@ -8,26 +8,4 @@ public enum ResponseStatus {
     BAD_REQUEST, UNAUTHORIZED, FORBIDDEN, NOT_FOUND,
 
     INTERNAL_SERVER_ERROR, NOT_IMPLEMENTED, BAD_GATEWAY, SERVICE_UNAVAILABLE;
-
-    private String message;
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public String getMessage() {
-        return this.message;
-    }
-
-    public static String getRegPattern() {
-        return "httpPatterns.statusLine.regexp";
-    }
-
-    public static int getStatusMessage() {
-        return 2;
-    }
-
-    public static int getStatusName() {
-        return 4;
-    }
 }

@@ -6,7 +6,6 @@ import by.bsuir.iit.aipos.domain.HTTPResponse;
 import by.bsuir.iit.aipos.domain.http_parameters.HttpMethod;
 import by.bsuir.iit.aipos.domain.http_parameters.ResponseStatus;
 import by.bsuir.iit.aipos.exception.BadRequestException;
-import by.bsuir.iit.aipos.exception.BadResponseException;
 import by.bsuir.iit.aipos.exception.ServiceException;
 import by.bsuir.iit.aipos.service.Connector;
 import by.bsuir.iit.aipos.service.ProtocolFormatter;
@@ -54,11 +53,16 @@ public class RequestController {
 
     public void httpRequest(ActionEvent actionEvent) {
 
+        HTTPRequest httpRequest = createRequest();
+        sendRequest(httpRequest);
+
+    }
+
+    private void sendRequest(HTTPRequest httpRequest) {
         try {
-            HTTPRequest httpRequest = createRequest();
             String requestMessage = protocolFormatter.toMessageFormat(httpRequest);
             HTTPResponse httpResponse = connector.sendRequest(httpRequest.getUrl(), requestMessage);
-            handleResponse(requestMessage, httpResponse);
+            handleResponse(requestMessage, httpRequest, httpResponse);
         } catch (BadRequestException e) {
             messageBody.getEngine().loadContent("Не удается получить доступ к сайту!");
             LOG.info(e.getMessage());
@@ -75,31 +79,18 @@ public class RequestController {
         return new HTTPRequest(methodName, urlField.getText(), senderModel.getHeaderMap(), entityBody);
     }
 
-    private void handleResponse(String requestMessage, HTTPResponse httpResponse) {
+    private void handleResponse(String requestMessage, HTTPRequest httpRequest, HTTPResponse httpResponse) throws BadRequestException {
 
         requestTA.setText(requestMessage);
-        responseTA.setText(httpResponse.getHeaderField());
-        handleStatusCode(httpResponse);
+        responseTA.setText(protocolFormatter.toMessageFormat(httpResponse));
+        handleStatusCode(httpRequest, httpResponse);
     }
 
-    private void handleStatusCode(HTTPResponse httpResponse) {
+    private void handleStatusCode(HTTPRequest httpRequest, HTTPResponse httpResponse) throws BadRequestException {
 
-        try {
-            ResponseStatus responseStatus = protocolFormatter.getStatusCode(httpResponse.getHeaderField());
-            messageBody.getEngine().loadContent(httpResponse.getEntityBody());
-
-            switch (responseStatus) {
-                case OK:
-                    messageBody.getEngine().loadContent(httpResponse.getEntityBody());
-                    break;
-                default:
-                    messageBody.getEngine().loadContent(responseStatus.getMessage());
-            }
-            LOG.info(responseStatus.getMessage());
-        } catch (BadResponseException e) {
-            messageBody.getEngine().loadContent(e.toString());
-            LOG.info(e.getMessage());
-        }
+        ResponseStatus responseStatus = ResponseStatus.valueOf(httpResponse.getStatusMessage().toUpperCase().replace(" ", "_"));
+        messageBody.getEngine().loadContent(httpResponse.getEntityBody());
+        LOG.info(responseStatus.name());
     }
 
     public void headerClicked(MouseEvent mouseEvent) {

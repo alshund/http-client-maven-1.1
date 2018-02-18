@@ -1,14 +1,10 @@
 package by.bsuir.iit.aipos.service;
 
 import by.bsuir.iit.aipos.domain.HTTPRequest;
-import by.bsuir.iit.aipos.domain.http_parameters.ResponseStatus;
+import by.bsuir.iit.aipos.domain.HTTPResponse;
 import by.bsuir.iit.aipos.exception.BadRequestException;
-import by.bsuir.iit.aipos.exception.BadResponseException;
 
-import java.util.Formatter;
-import java.util.Map;
-import java.util.ResourceBundle;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,7 +15,7 @@ public class ProtocolFormatter {
 
         if (isUrlValid(httpRequest.getUrl())) {
             String requestLine = prepareRequestLine(httpRequest.getMethod(), httpRequest.getUrl());
-            String headerField = prepareHeaderField(httpRequest.getHeaderMap());
+            String headerField = prepareRequestHeader(httpRequest.getHeaderMap());
             String entityBody = httpRequest.getEntityBody();
             return requestLine + headerField + FormatterUtil.CRLF + entityBody;
         } else {
@@ -27,32 +23,38 @@ public class ProtocolFormatter {
         }
     }
 
+    public String toMessageFormat(HTTPResponse httpResponse) {
+
+        String responseStatus = prepareResponseStatus(httpResponse);
+        String headerFiled = prepareResponseHeader(httpResponse.getHeaderMap());
+        String cookie = prepareCookie(httpResponse);
+        return responseStatus + headerFiled + cookie + FormatterUtil.CRLF;
+    }
+
+    private String prepareCookie(HTTPResponse httpResponse) {
+
+        List<String> cookieList = httpResponse.getCookieList();
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String cookie: cookieList) {
+            stringBuilder.append(cookie).append(FormatterUtil.CRLF);
+        }
+        return stringBuilder.toString();
+    }
+
+    private String prepareResponseStatus(HTTPResponse httpResponse) {
+
+        return httpResponse.getProtocolType() + " " + httpResponse.getStatusCode() + " " +
+               httpResponse.getStatusMessage() + FormatterUtil.CRLF;
+    }
+
     public String findHost(String url) throws BadRequestException {
 
-        Matcher hostUrlMatcher = getMatcher(FormatterUtil.HOST_REGEXP, url);
+        Matcher hostUrlMatcher = getMatcher(FormatterUtil.URL_REGEXP, url);
         if (hostUrlMatcher.find()) {
             return hostUrlMatcher.group(FormatterUtil.HOST_GROUP);
         } else {
             throw new BadRequestException("Invalid url: " + url);
         }
-    }
-
-    public ResponseStatus getStatusCode(String response) throws BadResponseException {
-
-        Matcher responseStatusMatcher = getMatcher(FormatterUtil.STATUS_CODE_REGEXP, response);
-        if (responseStatusMatcher.find()) {
-            String statusName = responseStatusMatcher.group(ResponseStatus.getStatusName());
-            ResponseStatus responseStatus = ResponseStatus.valueOf(toEnumFormat(statusName));
-            responseStatus.setMessage(responseStatusMatcher.group(ResponseStatus.getStatusMessage()));
-            return responseStatus;
-        } else {
-            throw new BadResponseException("Invalid response: "  + response);
-        }
-    }
-
-    private String toEnumFormat(String statusName) {
-
-        return statusName.toUpperCase().replace(" ", "_");
     }
 
     private String prepareRequestLine(String method, String url) {
@@ -62,7 +64,7 @@ public class ProtocolFormatter {
         return requestLine.toString() + FormatterUtil.CRLF;
     }
 
-    private String prepareHeaderField(Map<String, String> headerMap) {
+    private String prepareRequestHeader(Map<String, String> headerMap) {
 
         Formatter headerFormatter = new Formatter();
         Set<String> headerKeys = headerMap.keySet();
@@ -70,6 +72,16 @@ public class ProtocolFormatter {
             headerFormatter.format(getHeaderCode(header) + FormatterUtil.CRLF, headerMap.get(header));
         }
         return headerFormatter.toString();
+    }
+
+    private String prepareResponseHeader(Map<String, String> headerMap) {
+
+        Set<String> headerKeys = headerMap.keySet();
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String header : headerKeys) {
+            stringBuilder.append(header).append(": ").append(headerMap.get(header)).append(FormatterUtil.CRLF);
+        }
+        return stringBuilder.toString();
     }
 
     private String getHeaderCode(String key) {
