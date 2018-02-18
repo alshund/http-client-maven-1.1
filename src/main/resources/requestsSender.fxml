@@ -1,27 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Accordion?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.TitledPane?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
+<?import java.lang.*?>
+<?import javafx.scene.web.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.web.WebView?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="645.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.bsuir.iit.aipos.controller.RequestController">
-   <bottom>
-      <AnchorPane prefHeight="50.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-         <children>
-            <TextField fx:id="responseCode" editable="false" focusTraversable="false" layoutX="151.0" layoutY="107.0" promptText="Response code" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
-         </children>
-      </AnchorPane>
-   </bottom>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="645.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.bsuir.iit.aipos.controller.RequestController">
    <top>
       <AnchorPane prefHeight="50.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
@@ -56,175 +41,66 @@
       </AnchorPane>
    </top>
    <left>
-      <AnchorPane prefHeight="300.0" prefWidth="290.0" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="300.0" prefWidth="102.0" BorderPane.alignment="CENTER">
          <children>
             <Accordion AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                <panes>
-                  <TitledPane alignment="CENTER" prefHeight="230.0" prefWidth="225.0" text="General Header Fields">
+                  <TitledPane alignment="CENTER_LEFT" prefHeight="230.0" prefWidth="244.0" text="General Header">
                      <content>
                         <AnchorPane prefHeight="200.0" prefWidth="200.0">
                            <children>
-                              <GridPane layoutY="57.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                <columnConstraints>
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                </columnConstraints>
-                                <rowConstraints>
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                </rowConstraints>
+                              <VBox layoutX="84.0" layoutY="2.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
-                                    <AnchorPane prefHeight="200.0" prefWidth="200.0">
-                                       <children>
-                                          <CheckBox fx:id="date" layoutY="84.0" mnemonicParsing="false" onMouseClicked="#headerClicked" text="Date" />
-                                       </children>
-                                    </AnchorPane>
-                                    <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
-                                       <children>
-                                          <CheckBox fx:id="pragma" layoutY="84.0" mnemonicParsing="false" onMouseClicked="#headerClicked" text="Pragma" />
-                                       </children>
-                                    </AnchorPane>
+                                    <CheckBox fx:id="date" mnemonicParsing="false" onMouseClicked="#headerClicked" text="Date" />
+                                    <CheckBox fx:id="pragma" mnemonicParsing="false" onMouseClicked="#headerClicked" text="Pragma" />
                                  </children>
-                              </GridPane>
+                              </VBox>
                            </children>
                         </AnchorPane>
                      </content>
                   </TitledPane>
-                  <TitledPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" text="Request Hader Fields">
+                  <TitledPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" text="Request Hader">
                      <content>
                         <AnchorPane prefHeight="200.0" prefWidth="200.0">
                            <children>
-                              <GridPane layoutY="57.0" prefHeight="204.0" prefWidth="220.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                <columnConstraints>
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                </columnConstraints>
-                                <rowConstraints>
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                </rowConstraints>
+                              <VBox layoutX="14.0" layoutY="2.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
-                                    <AnchorPane prefHeight="200.0" prefWidth="200.0">
-                                       <children>
-                                          <GridPane layoutX="-10.0" layoutY="-14.0" prefHeight="76.0" prefWidth="190.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                            <columnConstraints>
-                                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                            </columnConstraints>
-                                            <rowConstraints>
-                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                            </rowConstraints>
-                                             <children>
-                                                <AnchorPane prefHeight="200.0" prefWidth="200.0">
-                                                   <children>
-                                                      <CheckBox fx:id="authorization" layoutY="23.0" mnemonicParsing="false" onMouseClicked="#headerClicked" text="Authorization" />
-                                                   </children>
-                                                </AnchorPane>
-                                                <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
-                                                   <children>
-                                                      <CheckBox fx:id="from" layoutY="23.0" mnemonicParsing="false" onMouseClicked="#headerClicked" text="From" />
-                                                   </children>
-                                                </AnchorPane>
-                                             </children>
-                                          </GridPane>
-                                       </children>
-                                    </AnchorPane>
-                                    <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
-                                       <children>
-                                          <GridPane layoutX="-10.0" layoutY="-14.0" prefHeight="76.0" prefWidth="190.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                            <columnConstraints>
-                                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                            </columnConstraints>
-                                            <rowConstraints>
-                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                            </rowConstraints>
-                                             <children>
-                                                <AnchorPane prefHeight="200.0" prefWidth="200.0">
-                                                   <children>
-                                                      <CheckBox fx:id="ifModifiedSince" layoutY="23.0" mnemonicParsing="false" onMouseClicked="#headerClicked" text="If-Modified-Since" />
-                                                   </children>
-                                                </AnchorPane>
-                                                <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
-                                                   <children>
-                                                      <CheckBox fx:id="referer" layoutY="23.0" mnemonicParsing="false" onMouseClicked="#headerClicked" text="Referer" />
-                                                   </children>
-                                                </AnchorPane>
-                                             </children>
-                                          </GridPane>
-                                       </children>
-                                    </AnchorPane>
-                                    <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
-                                       <children>
-                                          <GridPane layoutX="-10.0" layoutY="-14.0" prefHeight="62.0" prefWidth="180.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                            <columnConstraints>
-                                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                            </columnConstraints>
-                                            <rowConstraints>
-                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                            </rowConstraints>
-                                             <children>
-                                                <AnchorPane prefHeight="200.0" prefWidth="200.0">
-                                                   <children>
-                                                      <CheckBox fx:id="userAgent" alignment="CENTER" layoutX="83.0" layoutY="23.0" mnemonicParsing="false" onMouseClicked="#headerClicked" text="User-Agent" />
-                                                   </children>
-                                                </AnchorPane>
-                                             </children>
-                                          </GridPane>
-                                       </children>
-                                    </AnchorPane>
+                                    <CheckBox fx:id="authorization" mnemonicParsing="false" onMouseClicked="#headerClicked" text="Authorization" />
+                                    <CheckBox fx:id="from" mnemonicParsing="false" onMouseClicked="#headerClicked" text="From" />
+                                    <CheckBox fx:id="host" mnemonicParsing="false" onMouseClicked="#headerClicked" text="Host" />
+                                    <CheckBox fx:id="ifModifiedSince" mnemonicParsing="false" onMouseClicked="#headerClicked" text="If-Modified-Since" />
+                                    <CheckBox fx:id="referer" mnemonicParsing="false" onMouseClicked="#headerClicked" text="Referer" />
+                                    <CheckBox fx:id="userAgent" mnemonicParsing="false" onMouseClicked="#headerClicked" text="User-Agent" />
+                                    <CheckBox fx:id="cookie" mnemonicParsing="false" onMouseClicked="#headerClicked" text="Cookie" />
                                  </children>
-                              </GridPane>
+                              </VBox>
                            </children>
                         </AnchorPane>
                      </content>
                   </TitledPane>
-                  <TitledPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" text="Entity Header Fields">
+                  <TitledPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" text="Entity Header">
                      <content>
                         <AnchorPane prefHeight="200.0" prefWidth="200.0">
                            <children>
-                              <GridPane layoutY="57.0" prefHeight="204.0" prefWidth="220.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                <columnConstraints>
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                </columnConstraints>
-                                <rowConstraints>
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                </rowConstraints>
+                              <VBox layoutX="50.0" layoutY="2.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
-                                    <AnchorPane prefHeight="200.0" prefWidth="200.0">
-                                       <children>
-                                          <CheckBox fx:id="allow" layoutY="23.0" mnemonicParsing="false" onMouseClicked="#headerClicked" text="Allow" />
-                                       </children>
-                                    </AnchorPane>
-                                    <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
-                                       <children>
-                                          <CheckBox fx:id="contentEncoding" layoutY="23.0" mnemonicParsing="false" onMouseClicked="#headerClicked" text="Content-Encoding" />
-                                       </children>
-                                    </AnchorPane>
-                                    <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
-                                       <children>
-                                          <CheckBox fx:id="expires" layoutY="23.0" mnemonicParsing="false" onMouseClicked="#headerClicked" text="Expires" />
-                                       </children>
-                                    </AnchorPane>
-                                    <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                                       <children>
-                                          <CheckBox fx:id="contentLength" layoutY="23.0" mnemonicParsing="false" onMouseClicked="#headerClicked" text="Content-Length" />
-                                       </children>
-                                    </AnchorPane>
-                                    <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
-                                       <children>
-                                          <CheckBox fx:id="lastModified" layoutY="23.0" mnemonicParsing="false" onMouseClicked="#headerClicked" text="Last-Modified" />
-                                       </children>
-                                    </AnchorPane>
-                                    <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                                       <children>
-                                          <CheckBox fx:id="contentType" layoutY="23.0" mnemonicParsing="false" onMouseClicked="#headerClicked" text="Content-Type" />
-                                       </children>
-                                    </AnchorPane>
+                                    <CheckBox fx:id="allow" mnemonicParsing="false" onMouseClicked="#headerClicked" text="Allow" />
+                                    <CheckBox fx:id="contentEncoding" mnemonicParsing="false" onMouseClicked="#headerClicked" text="Content-Encoding" />
+                                    <CheckBox fx:id="contentLength" mnemonicParsing="false" onMouseClicked="#headerClicked" text="Content-Length" />
+                                    <CheckBox fx:id="contentType" mnemonicParsing="false" onMouseClicked="#headerClicked" text="Content-Type" />
+                                    <CheckBox fx:id="expires" mnemonicParsing="false" onMouseClicked="#headerClicked" text="Expires" />
+                                    <CheckBox fx:id="" mnemonicParsing="false" onMouseClicked="#headerClicked" text="Last-Modified" />
                                  </children>
-                              </GridPane>
+                              </VBox>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </TitledPane>
+                  <TitledPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" text="Entity Body">
+                     <content>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                           <children>
+                              <TextArea fx:id="entityBodyTA" layoutY="-10.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                            </children>
                         </AnchorPane>
                      </content>

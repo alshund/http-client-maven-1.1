@@ -1,6 +1,6 @@
 package by.bsuir.iit.aipos.domain;
 
-import by.bsuir.iit.aipos.service.constant.RequestLine;
+import by.bsuir.iit.aipos.service.FormatterUtil;
 
 import java.io.Serializable;
 
@@ -16,7 +16,7 @@ public class HTTPResponse implements Serializable {
     }
 
     public void appendHeaderField(String headerFieldLine) {
-        this.headerField.append(headerFieldLine + RequestLine.CRLF);
+        this.headerField.append(headerFieldLine + FormatterUtil.CRLF);
     }
 
     public String getEntityBody() {
@@ -24,6 +24,6 @@ public class HTTPResponse implements Serializable {
     }
 
     public void appendEntityBody(String entityBodyLine) {
-        this.entityBody.append(entityBodyLine + RequestLine.CRLF);
+        this.entityBody.append(entityBodyLine + FormatterUtil.CRLF);
     }
 }

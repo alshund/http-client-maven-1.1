@@ -1,14 +1,15 @@
 package by.bsuir.iit.aipos.controller;
 
+import by.bsuir.iit.aipos.SenderModel;
 import by.bsuir.iit.aipos.domain.HTTPRequest;
-import by.bsuir.iit.aipos.exception.BadResponseException;
-import by.bsuir.iit.aipos.domain.http_parameters.HttpMethod;
 import by.bsuir.iit.aipos.domain.HTTPResponse;
+import by.bsuir.iit.aipos.domain.http_parameters.HttpMethod;
+import by.bsuir.iit.aipos.domain.http_parameters.ResponseStatus;
+import by.bsuir.iit.aipos.exception.BadRequestException;
+import by.bsuir.iit.aipos.exception.BadResponseException;
+import by.bsuir.iit.aipos.exception.ServiceException;
 import by.bsuir.iit.aipos.service.Connector;
 import by.bsuir.iit.aipos.service.ProtocolFormatter;
-import by.bsuir.iit.aipos.exception.BadRequestException;
-import by.bsuir.iit.aipos.exception.ServiceException;
-import by.bsuir.iit.aipos.domain.http_parameters.ResponseStatus;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -16,25 +17,25 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.web.WebView;
+import org.apache.log4j.Logger;
 
 import java.util.Optional;
-import java.util.Map;
-import java.util.HashMap;
 
 public class RequestController {
 
+    private final Logger LOG = Logger.getLogger(RequestController.class.getName());
     @FXML
-    private TextField urlField, responseCode;
+    private TextField urlField;
     @FXML
-    private TextArea requestTA, responseTA;
+    private TextArea requestTA, responseTA, entityBodyTA;
     @FXML
     private WebView messageBody;
     @FXML
     private ComboBox httpMethods;
+
     private ObservableList<String> methodsList = FXCollections.observableArrayList();
 
-    private Map<String, String> headerField = new HashMap<>();
-
+    private SenderModel senderModel = new SenderModel();
     private ProtocolFormatter protocolFormatter = new ProtocolFormatter();
     private Connector connector = new Connector();
 
@@ -60,14 +61,18 @@ public class RequestController {
             handleResponse(requestMessage, httpResponse);
         } catch (BadRequestException e) {
             messageBody.getEngine().loadContent("Не удается получить доступ к сайту!");
+            LOG.info(e.getMessage());
         } catch (ServiceException e) {
-            e.printStackTrace();
+            messageBody.getEngine().loadContent("Сервер не отвечает!");
+            LOG.info(e.getMessage());
         }
     }
 
     private HTTPRequest createRequest() {
 
-        return new HTTPRequest((String) httpMethods.getValue(), urlField.getText(), headerField);
+        String methodName = (String) httpMethods.getValue();
+        String entityBody = entityBodyTA.getText();
+        return new HTTPRequest(methodName, urlField.getText(), senderModel.getHeaderMap(), entityBody);
     }
 
     private void handleResponse(String requestMessage, HTTPResponse httpResponse) {
@@ -83,16 +88,17 @@ public class RequestController {
             ResponseStatus responseStatus = protocolFormatter.getStatusCode(httpResponse.getHeaderField());
             messageBody.getEngine().loadContent(httpResponse.getEntityBody());
 
-//            switch (responseStatus) {
-//                case OK:
-//                    messageBody.getEngine().loadContent(httpResponse.getEntityBody());
-//                    break;
-//                default:
-//                    messageBody.getEngine().loadContent(responseStatus.getMessage());
-//            }
-            responseCode.setText(responseStatus.getMessage());
+            switch (responseStatus) {
+                case OK:
+                    messageBody.getEngine().loadContent(httpResponse.getEntityBody());
+                    break;
+                default:
+                    messageBody.getEngine().loadContent(responseStatus.getMessage());
+            }
+            LOG.info(responseStatus.getMessage());
         } catch (BadResponseException e) {
             messageBody.getEngine().loadContent(e.toString());
+            LOG.info(e.getMessage());
         }
     }
 
@@ -103,15 +109,15 @@ public class RequestController {
         if (activeCheckBox.isSelected()) {
             handlingInputDialog(activeCheckBox, headerId);
         } else {
-            headerField.remove(headerId);
+            senderModel.removeHeader(headerId);
         }
     }
 
     private void handlingInputDialog(CheckBox activeCheckBox, String headerId) {
 
-        Optional<String> inputData = createInputDialog(headerId);
+        Optional<String> inputData = createInputDialog(activeCheckBox.getText());
         if (inputData.isPresent()) {
-            headerField.put(headerId, inputData.get());
+            senderModel.addHeader(headerId, inputData.get());
         } else {
             activeCheckBox.setSelected(false);
         }
@@ -120,9 +126,21 @@ public class RequestController {
     private Optional<String> createInputDialog(String headerName) {
 
         TextInputDialog inputDialog = new TextInputDialog();
-        inputDialog.setTitle(headerName);
-        inputDialog.setContentText(headerName);
-        inputDialog.setHeaderText(headerName);
+        inputDialog.setTitle(getTitle());
+        inputDialog.setHeaderText(getHeader(headerName));
+        inputDialog.setContentText(getContent(headerName));
         return inputDialog.showAndWait();
+    }
+
+    private String getTitle() {
+        return "Header Input";
+    }
+
+    private String getHeader(String headerName) {
+        return headerName.toUpperCase() + " header!";
+    }
+
+    private String getContent(String headerName) {
+        return "Input value of " + headerName + ":";
     }
 }

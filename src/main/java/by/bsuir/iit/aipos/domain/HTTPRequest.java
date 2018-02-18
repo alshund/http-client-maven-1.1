@@ -10,11 +10,13 @@ public class HTTPRequest implements Serializable {
     private String method;
     private String url;
     private Map<String, String> headerMap = new HashMap<>();
+    private String entityBody;
 
-    public HTTPRequest(String method, String url, Map<String, String> headerMap) {
+    public HTTPRequest(String method, String url, Map<String, String> headerMap, String entityBody) {
         this.method = method;
         this.url = url;
         this.headerMap = headerMap;
+        this.entityBody = entityBody;
     }
 
     public String getMethod() {
@@ -39,5 +41,13 @@ public class HTTPRequest implements Serializable {
 
     public void setHeaderMap(Map<String, String> headerMap) {
         this.headerMap = headerMap;
+    }
+
+    public String getEntityBody() {
+        return entityBody;
+    }
+
+    public void setEntityBody(String entityBody) {
+        this.entityBody = entityBody;
     }
 }

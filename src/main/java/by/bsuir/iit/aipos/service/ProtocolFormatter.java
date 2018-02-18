@@ -20,7 +20,8 @@ public class ProtocolFormatter {
         if (isUrlValid(httpRequest.getUrl())) {
             String requestLine = prepareRequestLine(httpRequest.getMethod(), httpRequest.getUrl());
             String headerField = prepareHeaderField(httpRequest.getHeaderMap());
-            return requestLine + headerField + FormatterUtil.CRLF;
+            String entityBody = httpRequest.getEntityBody();
+            return requestLine + headerField + FormatterUtil.CRLF + entityBody;
         } else {
             throw new BadRequestException("Invalid url: " + httpRequest.getUrl());
         }
@@ -45,7 +46,7 @@ public class ProtocolFormatter {
             responseStatus.setMessage(responseStatusMatcher.group(ResponseStatus.getStatusMessage()));
             return responseStatus;
         } else {
-            throw new BadResponseException("Invalid response");
+            throw new BadResponseException("Invalid response: "  + response);
         }
     }
 
